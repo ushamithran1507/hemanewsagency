@@ -235,7 +235,7 @@ router.post('/export', authorize('admin'), (req, res, next) => {
  */
 router.post('/setup', authorize('admin'), async (req, res, next) => {
   try {
-    if (!process.env.USE_GOOGLE_DRIVE === 'true') {
+    if (process.env.USE_GOOGLE_DRIVE !== 'true') {
       throw new AppError('Google Drive not enabled', 400, 'GDRIVE_NOT_ENABLED');
     }
 
@@ -263,7 +263,7 @@ router.get('/backup/:fileId/content', authorize('admin'), async (req, res, next)
   try {
     const { fileId } = req.params;
 
-    if (!process.env.USE_GOOGLE_DRIVE === 'true' || !req.user.driveRefreshToken) {
+    if (process.env.USE_GOOGLE_DRIVE !== 'true' || !req.user.driveRefreshToken) {
       throw new AppError('Google Drive not configured', 400, 'GDRIVE_NOT_CONFIGURED');
     }
 
@@ -286,7 +286,7 @@ router.delete('/backup/:fileId', authorize('admin'), async (req, res, next) => {
   try {
     const { fileId } = req.params;
 
-    if (!process.env.USE_GOOGLE_DRIVE === 'true' || !req.user.driveRefreshToken) {
+    if (process.env.USE_GOOGLE_DRIVE !== 'true' || !req.user.driveRefreshToken) {
       throw new AppError('Google Drive not configured', 400, 'GDRIVE_NOT_CONFIGURED');
     }
 

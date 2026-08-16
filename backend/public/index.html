@@ -13,10 +13,12 @@
     --muted: #6b7280;
     --primary: #2563eb;
     --primary-hover: #1d4ed8;
+    --danger: #dc2626;
+    --danger-bg: #fef2f2;
+    --success-text: #15803d;
+    --success-bg: #f0fdf4;
     --error-bg: #fef2f2;
     --error-text: #b91c1c;
-    --success-bg: #f0fdf4;
-    --success-text: #15803d;
   }
   * { box-sizing: border-box; }
   body {
@@ -24,6 +26,11 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ---------- Auth screen ---------- */
+  #authScreen {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -39,175 +46,211 @@
     padding: 32px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   }
-  h1 {
-    font-size: 20px;
-    margin: 0 0 4px;
-  }
-  .subtitle {
-    color: var(--muted);
-    font-size: 13px;
-    margin: 0 0 24px;
-  }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .subtitle { color: var(--muted); font-size: 13px; margin: 0 0 24px; }
   .tabs {
-    display: flex;
-    gap: 4px;
-    background: var(--bg);
-    padding: 4px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    display: flex; gap: 4px; background: var(--bg);
+    padding: 4px; border-radius: 8px; margin-bottom: 20px;
   }
   .tab {
-    flex: 1;
-    text-align: center;
-    padding: 8px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--muted);
-    border: none;
-    background: transparent;
+    flex: 1; text-align: center; padding: 8px; border-radius: 6px;
+    cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted);
+    border: none; background: transparent;
   }
-  .tab.active {
-    background: var(--card);
-    color: var(--text);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  .tab.active { background: var(--card); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+  label { display: block; font-size: 12px; font-weight: 600; margin: 14px 0 6px; color: var(--muted); }
+  input, select, textarea {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+    border-radius: 8px; font-size: 14px; color: var(--text); background: var(--card);
+    font-family: inherit;
   }
-  label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    margin: 14px 0 6px;
-    color: var(--muted);
-  }
-  input, select {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 14px;
-    color: var(--text);
-    background: var(--card);
-  }
-  input:focus, select:focus {
-    outline: none;
-    border-color: var(--primary);
-  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
   button.submit {
-    width: 100%;
-    margin-top: 20px;
-    padding: 11px;
-    border: none;
-    border-radius: 8px;
-    background: var(--primary);
-    color: white;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+    width: 100%; margin-top: 20px; padding: 11px; border: none; border-radius: 8px;
+    background: var(--primary); color: white; font-size: 14px; font-weight: 600; cursor: pointer;
   }
   button.submit:hover { background: var(--primary-hover); }
   button.submit:disabled { opacity: 0.6; cursor: default; }
   .message {
-    margin-top: 16px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    font-size: 13px;
-    display: none;
+    margin-top: 16px; padding: 10px 12px; border-radius: 8px; font-size: 13px; display: none;
   }
   .message.error { background: var(--error-bg); color: var(--error-text); display: block; }
   .message.success { background: var(--success-bg); color: var(--success-text); display: block; }
   .form { display: none; }
   .form.active { display: block; }
 
-  .session {
-    display: none;
+  /* ---------- App shell ---------- */
+  #appScreen { display: none; min-height: 100vh; }
+  #appScreen.active { display: flex; }
+
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 56px;
+    background: #0f172a; color: #fff; display: flex; align-items: center;
+    justify-content: space-between; padding: 0 20px; z-index: 10;
   }
-  .session.active { display: block; }
-  .session .row {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
+  .topbar .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 14px; }
+  .topbar .brand .logo {
+    width: 30px; height: 30px; border-radius: 8px; background: var(--primary);
+    display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800;
   }
-  .session .row:last-of-type { border-bottom: none; }
-  .session .row span:first-child { color: var(--muted); }
-  .session .token {
-    font-family: ui-monospace, monospace;
-    font-size: 11px;
-    word-break: break-all;
-    background: var(--bg);
-    padding: 8px;
-    border-radius: 6px;
-    margin-top: 6px;
-    color: var(--muted);
+  .topbar .userbox { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+  .topbar button.signout {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+    color: #fff; font-size: 12.5px; padding: 6px 12px; border-radius: 7px; cursor: pointer;
   }
-  button.logout {
-    width: 100%;
-    margin-top: 20px;
-    padding: 11px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--text);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+
+  .sidebar {
+    position: fixed; top: 56px; bottom: 0; left: 0; width: 200px;
+    background: #fff; border-right: 1px solid var(--border); padding: 12px 0; overflow-y: auto;
   }
+  .sidebar button {
+    display: block; width: 100%; text-align: left; padding: 10px 20px; font-size: 13.5px;
+    font-weight: 500; color: var(--muted); background: none; border: none;
+    border-left: 3px solid transparent; cursor: pointer;
+  }
+  .sidebar button:hover { background: #f8fafc; }
+  .sidebar button.active { color: var(--primary); border-left-color: var(--primary); background: #eff6ff; font-weight: 600; }
+
+  .content { margin-left: 200px; margin-top: 56px; padding: 24px; width: 100%; max-width: 1100px; }
+  @media (max-width: 760px) {
+    .sidebar { width: 100%; position: static; display: flex; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    .sidebar button { border-left: none; border-bottom: 3px solid transparent; white-space: nowrap; }
+    .sidebar button.active { border-left-color: transparent; border-bottom-color: var(--primary); }
+    .content { margin-left: 0; }
+    #appScreen.active { flex-direction: column; }
+    .content { margin-top: 0; }
+  }
+
+  h2 { font-size: 17px; margin: 0 0 16px; }
+  .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .toolbar input[type="search"] { max-width: 260px; }
+
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .kpi .val { font-size: 20px; font-weight: 700; }
+  .kpi .lbl { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+  .panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: #fafafa; color: var(--muted); font-size: 11.5px; }
+  th, td { text-align: left; padding: 9px 14px; }
+  tbody tr { border-top: 1px solid var(--border); }
+  .empty-row td { text-align: center; color: var(--muted); padding: 28px; }
+
+  button.btn {
+    border: none; border-radius: 7px; padding: 8px 14px; font-size: 12.5px; font-weight: 600;
+    cursor: pointer; background: var(--primary); color: #fff;
+  }
+  button.btn:hover { background: var(--primary-hover); }
+  button.btn.secondary { background: #f1f5f9; color: var(--text); }
+  button.btn.danger { background: var(--danger-bg); color: var(--danger); }
+  button.btn.link { background: none; color: var(--primary); padding: 4px 6px; font-size: 12px; }
+  button.btn.link.danger { color: var(--danger); }
+
+  .badge { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; display: inline-block; }
+  .badge.green { background: #ecfdf5; color: #047857; }
+  .badge.amber { background: #fffbeb; color: #b45309; }
+  .badge.red { background: #fff1f2; color: #be123c; }
+  .badge.gray { background: #f1f5f9; color: #475569; }
+
+  .loading, .error-box { padding: 24px; text-align: center; color: var(--muted); font-size: 13px; }
+  .error-box { color: var(--danger); }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(15,23,42,0.4); display: flex;
+    align-items: center; justify-content: center; z-index: 100; padding: 16px;
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal {
+    background: #fff; border-radius: 14px; width: 100%; max-width: 420px;
+    max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  }
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+  }
+  .modal-header h3 { margin: 0; font-size: 14.5px; }
+  .modal-header button { background: none; border: none; font-size: 18px; color: var(--muted); cursor: pointer; }
+  .modal-body { padding: 20px; }
+  .modal-body .submit { margin-top: 16px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 </style>
 </head>
 <body>
 
-<div class="card">
+<!-- ===== AUTH SCREEN ===== -->
+<div id="authScreen">
+  <div class="card">
+    <div id="authView">
+      <h1>Hema News Agency</h1>
+      <p class="subtitle">Newspaper Distribution Management</p>
 
-  <div id="authView">
-    <h1>Hema News Agency</h1>
-    <p class="subtitle">Newspaper Distribution Management</p>
+      <div class="tabs">
+        <button class="tab active" data-tab="login">Sign In</button>
+        <button class="tab" data-tab="register">Create Account</button>
+      </div>
 
-    <div class="tabs">
-      <button class="tab active" data-tab="login">Sign In</button>
-      <button class="tab" data-tab="register">Create Account</button>
+      <form id="loginForm" class="form active">
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" type="email" required autocomplete="username">
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" required autocomplete="current-password">
+        <button class="submit" type="submit">Sign In</button>
+      </form>
+
+      <form id="registerForm" class="form">
+        <label for="regName">Full name</label>
+        <input id="regName" type="text" required>
+        <label for="regEmail">Email</label>
+        <input id="regEmail" type="email" required>
+        <label for="regMobile">Mobile number</label>
+        <input id="regMobile" type="tel" required>
+        <label for="regPassword">Password</label>
+        <input id="regPassword" type="password" required minlength="6">
+        <label for="regRole">Role</label>
+        <select id="regRole">
+          <option value="admin">Admin</option>
+          <option value="staff">Staff</option>
+          <option value="customer">Customer</option>
+        </select>
+        <button class="submit" type="submit">Create Account</button>
+      </form>
+
+      <div id="message" class="message"></div>
     </div>
-
-    <form id="loginForm" class="form active">
-      <label for="loginEmail">Email</label>
-      <input id="loginEmail" type="email" required autocomplete="username">
-      <label for="loginPassword">Password</label>
-      <input id="loginPassword" type="password" required autocomplete="current-password">
-      <button class="submit" type="submit">Sign In</button>
-    </form>
-
-    <form id="registerForm" class="form">
-      <label for="regName">Full name</label>
-      <input id="regName" type="text" required>
-      <label for="regEmail">Email</label>
-      <input id="regEmail" type="email" required>
-      <label for="regMobile">Mobile number</label>
-      <input id="regMobile" type="tel" required>
-      <label for="regPassword">Password</label>
-      <input id="regPassword" type="password" required minlength="6">
-      <label for="regRole">Role</label>
-      <select id="regRole">
-        <option value="admin">Admin</option>
-        <option value="staff">Staff</option>
-        <option value="customer">Customer</option>
-      </select>
-      <button class="submit" type="submit">Create Account</button>
-    </form>
-
-    <div id="message" class="message"></div>
   </div>
+</div>
 
-  <div id="sessionView" class="session">
-    <h1>Signed in</h1>
-    <p class="subtitle">Your session is active</p>
-    <div class="row"><span>Name</span><span id="sName"></span></div>
-    <div class="row"><span>Email</span><span id="sEmail"></span></div>
-    <div class="row"><span>Role</span><span id="sRole"></span></div>
-    <div class="token" id="sToken"></div>
-    <button class="logout" id="logoutBtn">Sign out</button>
+<!-- ===== APP SCREEN ===== -->
+<div id="appScreen">
+  <div class="topbar">
+    <div class="brand"><span class="logo">HN</span> Hema News Agency</div>
+    <div class="userbox">
+      <span id="topUserName"></span>
+      <button class="signout" id="signoutBtn">Sign out</button>
+    </div>
   </div>
+  <div class="sidebar" id="sidebar">
+    <button data-section="dashboard" class="active">Dashboard</button>
+    <button data-section="customers">Customers</button>
+    <button data-section="billing">Billing</button>
+    <button data-section="staff">Staff</button>
+    <button data-section="publications">Publications</button>
+    <button data-section="grievances">Grievances</button>
+  </div>
+  <div class="content" id="content"></div>
+</div>
 
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle"></h3>
+      <button id="modalClose" type="button">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
 </div>
 
 <script src="/app.js"></script>

@@ -6,7 +6,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
-const { generateToken } = require('../middleware/auth');
+const { generateToken, authenticate } = require('../middleware/auth');
 const DatabaseManager = require('../utils/DatabaseManager');
 const { AppError } = require('../middleware/errorHandler');
 
@@ -141,7 +141,7 @@ router.post('/register', async (req, res, next) => {
 /**
  * Get current user - GET /api/auth/me
  */
-router.get('/me', (req, res, next) => {
+router.get('/me', authenticate, (req, res, next) => {
   try {
     const user = db.findOne('users', { id: req.user.id });
 
@@ -168,7 +168,7 @@ router.get('/me', (req, res, next) => {
 /**
  * Change password - POST /api/auth/change-password
  */
-router.post('/change-password', async (req, res, next) => {
+router.post('/change-password', authenticate, async (req, res, next) => {
   try {
     const { currentPassword, newPassword } = req.body;
 
