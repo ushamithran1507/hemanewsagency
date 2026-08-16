@@ -4,6 +4,7 @@
  */
 
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
@@ -56,15 +57,8 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Root status page
-app.get('/', (req, res) => {
-  res.json({
-    name: 'Hema News Agency API',
-    status: 'running',
-    health: '/api/health',
-    documentation: '/api'
-  });
-});
+// Static frontend (login page)
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Public routes (no authentication required)
 app.use('/api/auth', authRoutes);

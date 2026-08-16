@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hema News Agency</title>
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --card: #ffffff;
+    --border: #e2e4e9;
+    --text: #1c1e21;
+    --muted: #6b7280;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --error-bg: #fef2f2;
+    --error-text: #b91c1c;
+    --success-bg: #f0fdf4;
+    --success-text: #15803d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    width: 100%;
+    max-width: 380px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  h1 {
+    font-size: 20px;
+    margin: 0 0 4px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 24px;
+  }
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--bg);
+    padding: 4px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    border: none;
+    background: transparent;
+  }
+  .tab.active {
+    background: var(--card);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 14px 0 6px;
+    color: var(--muted);
+  }
+  input, select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--card);
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+  button.submit {
+    width: 100%;
+    margin-top: 20px;
+    padding: 11px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button.submit:hover { background: var(--primary-hover); }
+  button.submit:disabled { opacity: 0.6; cursor: default; }
+  .message {
+    margin-top: 16px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: none;
+  }
+  .message.error { background: var(--error-bg); color: var(--error-text); display: block; }
+  .message.success { background: var(--success-bg); color: var(--success-text); display: block; }
+  .form { display: none; }
+  .form.active { display: block; }
+
+  .session {
+    display: none;
+  }
+  .session.active { display: block; }
+  .session .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .session .row:last-of-type { border-bottom: none; }
+  .session .row span:first-child { color: var(--muted); }
+  .session .token {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    word-break: break-all;
+    background: var(--bg);
+    padding: 8px;
+    border-radius: 6px;
+    margin-top: 6px;
+    color: var(--muted);
+  }
+  button.logout {
+    width: 100%;
+    margin-top: 20px;
+    padding: 11px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div id="authView">
+    <h1>Hema News Agency</h1>
+    <p class="subtitle">Newspaper Distribution Management</p>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="login">Sign In</button>
+      <button class="tab" data-tab="register">Create Account</button>
+    </div>
+
+    <form id="loginForm" class="form active">
+      <label for="loginEmail">Email</label>
+      <input id="loginEmail" type="email" required autocomplete="username">
+      <label for="loginPassword">Password</label>
+      <input id="loginPassword" type="password" required autocomplete="current-password">
+      <button class="submit" type="submit">Sign In</button>
+    </form>
+
+    <form id="registerForm" class="form">
+      <label for="regName">Full name</label>
+      <input id="regName" type="text" required>
+      <label for="regEmail">Email</label>
+      <input id="regEmail" type="email" required>
+      <label for="regMobile">Mobile number</label>
+      <input id="regMobile" type="tel" required>
+      <label for="regPassword">Password</label>
+      <input id="regPassword" type="password" required minlength="6">
+      <label for="regRole">Role</label>
+      <select id="regRole">
+        <option value="admin">Admin</option>
+        <option value="staff">Staff</option>
+        <option value="customer">Customer</option>
+      </select>
+      <button class="submit" type="submit">Create Account</button>
+    </form>
+
+    <div id="message" class="message"></div>
+  </div>
+
+  <div id="sessionView" class="session">
+    <h1>Signed in</h1>
+    <p class="subtitle">Your session is active</p>
+    <div class="row"><span>Name</span><span id="sName"></span></div>
+    <div class="row"><span>Email</span><span id="sEmail"></span></div>
+    <div class="row"><span>Role</span><span id="sRole"></span></div>
+    <div class="token" id="sToken"></div>
+    <button class="logout" id="logoutBtn">Sign out</button>
+  </div>
+
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
