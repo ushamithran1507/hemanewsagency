@@ -1,0 +1,17 @@
+{
+  "name": "hema-news-agency",
+  "version": "1.0.0",
+  "description": "Hema News Agency - News distribution platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["news", "agency", "distribution"],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "18.x"
+  }
+}
+
