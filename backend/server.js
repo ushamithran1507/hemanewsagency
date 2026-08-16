@@ -56,6 +56,16 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Root status page
+app.get('/', (req, res) => {
+  res.json({
+    name: 'Hema News Agency API',
+    status: 'running',
+    health: '/api/health',
+    documentation: '/api'
+  });
+});
+
 // Public routes (no authentication required)
 app.use('/api/auth', authRoutes);
 
