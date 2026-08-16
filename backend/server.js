@@ -33,7 +33,7 @@ app.use(compression());
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: process.env.FRONTEND_URL || '*',
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
@@ -49,6 +49,26 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
   next();
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Hema News Agency - Backend API',
+    version: '1.0.0',
+    status: 'online',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth/login',
+      customers: '/api/customers',
+      billing: '/api/billing',
+      staff: '/api/staff',
+      dashboard: '/api/dashboard/stats',
+      gdrive: '/api/gdrive/backup'
+    }
+  });
 });
 
 // Health check endpoint
@@ -93,6 +113,8 @@ app.listen(PORT, () => {
   🔐 Authentication: ${process.env.JWT_SECRET ? '✓ Configured' : '✗ Not configured'}
   
   API Documentation:
+  - Root: GET /
+  - Health: GET /api/health
   - Auth: POST /api/auth/login
   - Customers: GET/POST/PUT /api/customers
   - Billing: GET/POST /api/billing
@@ -103,3 +125,4 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
+
