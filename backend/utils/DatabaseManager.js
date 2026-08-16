@@ -8,7 +8,7 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
 class DatabaseManager {
-  constructor(dataDir = './data') {
+  constructor(dataDir = process.env.DATA_DIR || './data') {
     this.dataDir = dataDir;
     this.ensureDataDirectory();
     this.collections = {
